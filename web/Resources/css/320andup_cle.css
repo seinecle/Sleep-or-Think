@@ -1,0 +1,922 @@
+/* ============================================================
+
+320 and Up by Andy Clarke
+Version: 3.0
+URL: http://stuffandnonsense.co.uk/projects/320andup/
+Apache License: v2.0. http://www.apache.org/licenses/LICENSE-2.0
+
+Modified by Clement Levallois
+
+============================================================ */
+/* Reset =================================================== */
+html,
+body,
+body div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+article,
+aside,
+figure,
+footer,
+header{
+
+}
+hgroup,
+nav,
+section {
+    display: block;
+}
+/* Variables =================================================== */
+/* Mixins =================================================== */
+.clearfix {
+    *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both;
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    position: static;
+    clip: auto;
+    height: auto;
+    width: auto;
+    margin: 0;
+    overflow: visible;
+}
+/* Page =================================================== */
+html {
+    background: #ffffff;
+    font-size: 62.5%;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: #f3f5f6;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    height: 100%; 
+    min-height: 100%;
+}
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-size: 1.6rem;
+    line-height: 1.5em;
+    color: #000000;
+    height: 100%; 
+    min-height: 100%;
+}
+/* Typography =================================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-family: inherit;
+    font-weight: bold;
+    color: inherit;
+    text-rendering: optimizelegibility;
+}
+h1 small,
+h2 small {
+    font-weight: normal;
+    color: #bfbfbf;
+
+}
+h1,
+.h1 {
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+
+    margin-bottom: 0;
+    font-size: 32px;
+    font-size: 3.2rem;
+    line-height: 1.2;
+    text-align:center;
+}
+h2,
+.h2 {
+    margin-bottom: 0.75em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    font-size: 24px;
+    font-size: 2.4rem;
+    line-height: 1.2;
+    text-align:center;
+}
+h3,
+.h3 {
+    margin-bottom: 1em;
+    font-size: 21px;
+    font-size: 2.1rem;
+    line-height: 1.3;
+}
+h4,
+.h4 {
+    margin-bottom: 1.5em;
+    font-size: 18px;
+    font-size: 1.8rem;
+    line-height: 1.25;
+}
+h5,
+.h5 {
+    font-size: 16px;
+    font-size: 1.6rem;
+    margin-bottom: 1.5em;
+}
+h6,
+.h6 {
+    margin-bottom: 1.5em;
+    font-size: 14px;
+    font-size: 1.4rem;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.header{
+    padding-top:0.75em;
+    text-align:center;
+    vertical-align:middle;
+    background-color:black;
+    color:white;
+}
+.header h1,
+.header h2,
+.header h3 {
+    float: left;
+    margin-right: 24px;
+}
+.header h1 a,
+.header h2 a,
+.header h3 a {
+    display: block;
+    position: relative;
+    top: 6px;
+    float: right;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-size: 1.4rem;
+    background-color: #f3f5f6;
+}
+.header h1:hover,
+.header h2:hover,
+.header h3:hover {
+    background-color: #f3f5f6;
+}
+.header .a-rss,
+.header .a-rss:hover {
+    float: left;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    background: transparent url(../img/a-rss.png) no-repeat 0 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+p,
+ol,
+ul,
+dl,
+address {
+    margin-bottom: 1.5em;
+    font-size: 14px;
+    font-size: 1.4rem;
+    line-height: 1.5em;
+}
+small {
+    font-size: 14px;
+    font-size: 1.4rem;
+}
+ul,
+ol {
+    margin: 0 0 1.5em -24px;
+    padding: 0 0 0 24px;
+}
+li ul,
+li ol {
+    margin: 0;
+    font-size: 16px;
+    font-size: 1.6rem;
+}
+blockquote {
+    margin: 0 0 1.5em -24px;
+    padding-left: 24px;
+    border-left: 2px solid #c7ced6;
+    font-family: Cambria, Georgia, Times, "Times New Roman";
+    font-style: normal;
+}
+q {
+    quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+cite {
+    font-style: normal;
+}
+dl,
+dd {
+    margin-bottom: 1.5em;
+}
+dt {
+    font-weight: bold;
+}
+.dl-horizontal dt {
+    float: left;
+    clear: left;
+    width: 20.25%;
+    text-align: right;
+}
+.dl-horizontal dd {
+    margin-left: 22.78%;
+}
+abbr[title] {
+    border-bottom: 1px dotted #c7ced6;
+    cursor: help;
+}
+b,
+strong {
+    font-weight: bold;
+}
+
+/* Colour =================================================== */
+a {
+    text-decoration: none;
+    color: #013568;
+}
+
+table * a {
+    text-decoration: none;
+    color: #013568;
+    /*  border-bottom: 1px #013568 dotted;*/
+}
+a:visited {
+    color: #013568;
+}
+a:hover {
+    text-decoration: underline;
+    color: #011b35;
+}
+a:focus {
+    outline: thin dotted;
+    color: #000000;
+}
+a:hover,
+a:active {
+    outline: 0;
+}
+::-moz-selection {
+    background-color: #d6dbe1;
+    color: #2d353e;
+    text-shadow: none;
+}
+::selection {
+    background-color: #d6dbe1;
+    color: #2d353e;
+    text-shadow: none;
+}
+
+
+
+/* Font Awesome: http://fortawesome.github.com/Font-Awesome/
+
+License
+-------------------------------------------------------
+The Font Awesome webfont, CSS, and LESS files are licensed under CC BY 3.0:
+http://creativecommons.org/licenses/by/3.0/ A mention of
+'Font Awesome - http://fortawesome.github.com/Font-Awesome' in human-readable
+source code is considered acceptable attribution (most common on the web).
+If human readable source code is not available to the end user, a mention in
+an 'About' or 'Credits' screen is considered acceptable (most common in desktop
+or mobile software). */
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.eot');
+    src: url('../fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff') format('woff'), url('../fonts/fontawesome-webfont.ttf') format('truetype'), url('../fonts/fontawesome-webfont.svgz#FontAwesomeRegular') format('svg'), url('../fonts/fontawesome-webfont.svg#FontAwesomeRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+    display: inline;
+    width: auto;
+    height: auto;
+    line-height: inherit;
+    vertical-align: baseline;
+    background-image: none;
+    background-position: 0 0;
+    background-repeat: repeat;
+}
+li[class^="icon-"],
+li[class*=" icon-"] {
+    display: block;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+}
+a [class^="icon-"],
+a [class*=" icon-"] {
+    display: inline-block;
+    text-decoration: inherit;
+}
+/* makes the font 33% larger relative to the icon container */
+.icon-large:before {
+    vertical-align: top;
+    font-size: 1.3333333333333333em;
+}
+.btn [class^="icon-"],
+.btn [class*=" icon-"] {
+    /* keeps button heights with and without icons the same */
+
+    line-height: .9em;
+}
+li [class^="icon-"],
+li [class*=" icon-"] {
+    display: inline-block;
+    width: 1.25em;
+    text-align: center;
+}
+li .icon-large[class^="icon-"],
+li .icon-large[class*=" icon-"] {
+    /* 1.5 increased font size for icon-large * 1.25 width */
+
+    width: 1.875em;
+}
+li[class^="icon-"],
+li[class*=" icon-"] {
+    margin-left: 0;
+    list-style-type: none;
+}
+li[class^="icon-"]:before,
+li[class*=" icon-"]:before {
+    text-indent: -2em;
+    text-align: center;
+}
+li[class^="icon-"].icon-large:before,
+li[class*=" icon-"].icon-large:before {
+    text-indent: -1.3333333333333333em;
+}
+/*  Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+    readers do not read off random characters that represent icons */
+
+.icon-download-alt:before {
+    content: "\f019";
+}
+
+.icon-bookmark:before {
+    content: "\f02e";
+}
+.icon-info-sign:before {
+    content: "\f05a";
+}
+.icon-arrow-down:before {
+    content: "\f063";
+}
+
+.icon-home:before {
+    content: "\f015";
+}
+
+/* Elements =================================================== */
+hr {
+    display: block;
+    margin: 1em 0;
+    padding: 0;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #c7ced6;
+    border-bottom: 1px solid #ffffff;
+}
+img {
+    max-width: 100%;
+    border-width: 0;
+    vertical-align: middle;
+    -ms-interpolation-mode: bicubic;
+}
+
+input,
+button,
+select,
+textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Buttons =================================================== */
+.btn {
+    display: inline-block;
+    *display: inline;
+    /* IE7 inline-block hack */
+
+    *zoom: 1;
+    padding: 6px 11px 6px;
+    margin-bottom: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.5em;
+    color: #404040;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #e6e6e6;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#d9d9d9));
+    background-image: -webkit-linear-gradient(top, #ffffff, #d9d9d9);
+    background-color: #d9d9d9;
+    background-image: -moz-linear-gradient(top, #ffffff, #d9d9d9);
+    background-image: -ms-linear-gradient(top, #ffffff, #d9d9d9);
+    background-image: -o-linear-gradient(top, #ffffff, #d9d9d9);
+    background-image: linear-gradient(top, #ffffff, #d9d9d9);
+    background-repeat: repeat-x;
+    border: 1px solid #cccccc;
+    border-bottom-color: #b3b3b3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    *margin-left: .3em;
+}
+.btn:visited,
+.btn:hover {
+    color: #404040;
+    text-decoration: none;
+}
+input[type="submit"].btn:hover {
+    border-color: #cccccc;
+}
+.btn:first-child {
+    *margin-left: 0;
+}
+
+.btn-extlarge {
+    padding: 11px 22px;
+    font-size: 21px;
+    font-size: 2.1rem;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.btn-extlarge-cle {
+    padding: 25px 70px;
+    margin: 10px 15px;
+    text-align: center;
+    font-size: 2.1rem;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.btn-mini {
+    padding: 3px 5px;
+    margin: -4px 0px 0px 5px;
+    font-size: 11px;
+    font-size: 1.1rem;
+}
+
+
+/* Tables =================================================== */
+table {
+    width: 95%;
+    max-width: 95%;
+    margin-bottom: 1.5em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: transparent;
+    margin-left:2.5%;
+}
+table th,
+table td {
+    padding: 8px;
+    vertical-align: middle;
+    border-top: 1px solid #8c9bab;
+    font-size: 14px;
+    font-size: 1.4rem;
+    line-height: 1.5em;
+    text-align: left;
+}
+table th {
+    font-weight: bold;
+}
+table thead th {
+    vertical-align: bottom;
+}
+table colgroup + thead tr:first-child th,
+table colgroup + thead tr:first-child td,
+table thead:first-child tr:first-child th,
+table thead:first-child tr:first-child td {
+    border-top: 0;
+}
+table tbody + tbody {
+    border-top: 2px solid #8c9bab;
+}
+table tbody tr td,
+table tbody tr th {
+    -webkit-transition: background-color 0.25s 0 linear;
+    -moz-transition: background-color 0.25s 0 linear;
+    -ms-transition: background-color 0.25s 0 linear;
+    -o-transition: background-color 0.25s 0 linear;
+    transition: background-color 0.25s 0 linear;
+}
+table tbody tr:hover td,
+table tbody tr:hover th {
+    background-color: #a9b4c1;
+}
+
+.table-bordered {
+    border: 1px solid #8c9bab;
+    border-left: 0;
+    border-collapse: separate;
+    *border-collapse: collapsed;
+}
+.table-bordered th,
+.table-bordered td {
+    border-left: 1px solid #8c9bab;
+}
+.table-bordered thead:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child td {
+    border-top: 0;
+}
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+    background-color: #c7ced6;
+}
+@media print {
+    /* Print =================================================== */
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+    @page  {
+        margin: 0.5cm;
+    }
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+        page-break-after: avoid;
+    }
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+    pre,
+    blockquote {
+        border: 1px solid #808080;
+        page-break-inside: avoid;
+    }
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+    a,
+    a:visited {
+        text-decoration: none;
+    }
+    table:a,
+    table:a:visited {
+        text-decoration: none;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+    }
+    tr {
+        page-break-inside: avoid;
+    }
+}
+@media only screen and (min-width: 480px) {
+    /* 480 =================================================== */
+}
+@media only screen and (min-width: 600px) {
+    /* 600 =================================================== */
+}
+@media only screen and (min-width: 768px) {
+    /* 768 =================================================== */
+}
+@media only screen and (min-width: 992px) {
+    /* 992 =================================================== */
+}
+@media only screen and (min-width: 1382px) {
+    /* 1382 =================================================== */
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
+}
+
+/* Clement's own styles */
+.theCols{
+    width: 30%;
+    max-width:100px;
+    text-align: center;
+}
+
+.bad{
+    background-color: red;
+}
+
+.good{
+    background-color: green;
+}
+
+.invisible { display: none; }
+
+#tiles {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+.tile {
+    width: 45%;
+    height: 25%;
+    float: left;
+    margin:1%;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.title {
+    font-size: 1.5em;
+}
+
+
+.rightCol{
+    text-align: left;
+}
+
+
+.tablehomepage{
+    border-top: 0px;
+}
+
+/* center nav */
+.nav.center ul {
+    text-align: center;
+}
+
+
+/* footer stuff */
+.footer {
+    margin-top:70px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.nav .current {
+    display: none; /* show only current <li> item */
+}
+
+.topleftcorner
+{
+    padding: 10px 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+@media screen and (max-width: 640px) {
+
+    .btn-extlarge-cle {
+        padding: 15px 50px;
+        margin: 5px 15px;
+        text-align: center;
+        font-size: 1.5rem;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .extraspace{
+        display: hide;
+    }
+
+}
+@media screen and (max-width: 600px) {
+
+
+
+    .nav {
+        position: relative;
+        min-height: 40px;
+        text-align: center;
+
+    }
+
+    table td {
+        text-align: center;
+
+    }
+
+    .nav ul {
+        width: 180px;
+        padding: 5px 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: solid 1px #aaa;
+        background: #fff url(images/icon-menu.png) no-repeat 10px 11px;
+        border-radius: 5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.3);
+        text-align: center;
+    }
+    .nav li {
+        display: none; /* hide all <li> items */
+        margin: 0;
+        text-align: center;
+    }
+
+    .bigpic {
+        display: none; /* hide all <li> items */
+        margin: 0;
+        text-align: center;
+    }
+
+
+
+    .abstract{
+        display: none; /* hide all abstracts from papers */
+        margin: 0;
+        text-align: left;
+    }
+
+    .btn-mini {
+        display: none; /* hides the navigation buttons */
+        margin: 0;
+    }
+
+    .theCols{
+        width:0%;
+        display: none; /* hide the left column with the picture */
+        margin: 0;
+    }
+
+    .nav .current {
+        display: block; /* show only current <li> item */
+        text-align: center;
+
+    }
+
+    .nav a {
+        display: block;
+        padding: 5px 5px 5px 5px;
+        text-align: center;
+        text-decoration: none;
+    }
+    .nav .current a {
+        background: none;
+        color: #666;
+        text-align: center;
+        text-decoration: none;
+
+    }
+
+    /* on nav hover */
+    .nav ul:hover {
+        background-image: none;
+        text-align: center;
+    }
+    .nav ul:hover li {
+        display: block;
+        margin: 0 0 5px;
+        padding: 0px 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        border-radius: 0px;
+        background-image: none;
+        background: none;
+        border: none;
+        text-align: center;
+
+    }
+    .nav ul:hover .current {
+        background: url(images/icon-check.png) no-repeat 10px 7px;
+        text-align: center;
+    }
+
+    .nav ul:hover .footer {
+        text-align: left;
+    }	
+
+
+    /* in the home page only, make the cells of the table not change to dark when hovered on*/
+    table tbody tr:hover td,
+    table tbody tr:hover th {
+        background-color: white;
+    }
+
+
+
+    /* center nav */
+    .nav.center ul {
+        left: 50%;
+        margin-left: -90px;
+        text-align: center;
+    }
+
+
+
+}
+

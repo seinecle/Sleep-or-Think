@@ -1,0 +1,70 @@
+/* 
+    Document   : index
+    Created on : Dec 11, 2012, 9:23:15 PM
+    Author     : C. Levallois
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body { 
+    font-family: tahoma;
+}
+
+#appTitle{
+    font-size:180%;
+}
+
+#title{
+    font-size:140%;
+}
+
+#text{
+    margin:10px;    
+}
+
+.datalist-noborder .ui-widget-content {
+    border: none;
+    background: none;
+}
+#subtitle{
+    font-size:110%;
+}
+
+.ui-datalist-data {
+    height:500px;
+    overflow:auto;
+    width: 80%;
+}
+
+.button{
+    margin-top: 10%;
+    margin-left: 10%;
+    font-size:120%;
+    width:20%;
+    border:1;
+    background: none;
+}
+
+#panel .ui-widget-content{
+    border:none;
+    background: none;
+    
+}
+
+#box {
+    position:absolute;
+    border:solid black 1px;
+    top:15%;
+    bottom:15%;
+    margin:-10px;
+    width:110%;
+background-repeat:repeat;
+
+}
+
+
+
+h1{
+    margin:auto;
+    text-align:center;
+}

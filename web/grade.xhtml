@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Sleep or think</title>
+
+        <h:outputStylesheet library="css" name="index.css" />
+    </h:head>
+
+    <h:body>
+        <h1 style="text-align:center;">What the group is thinking right now:</h1>
+        <p:meterGaugeChart id="gauge" value="#{bean.meterGaugeChartModel}" seriesColors="ff0000, ff8300, ffe500, a1ff00, 00ff04"></p:meterGaugeChart>
+
+        <h:form>
+            <h2 style="text-align:center;">What I think right now:</h2>
+            <h:panelGrid columns="3" style="margin-bottom:10px; margin-left: auto; margin-right: auto;" cellpadding="1">
+
+                <p:selectOneRadio id="selection" value="#{bean.grade}" layout="pageDirection">  
+                    <f:selectItem itemLabel="Bored..." itemValue="0" /><br/>  
+                    <f:selectItem itemLabel="Ok, I follow" itemValue="1" /><br/>  
+                    <f:selectItem itemLabel="Very interesting!" itemValue="2" /><br/>  
+                </p:selectOneRadio>  
+            </h:panelGrid>
+            <br/>
+            <div>
+                <p:commandButton  style="left:47%;" value="send" action ="#{bean.confirmGrade}" ></p:commandButton>
+
+            </div>
+            <div style="text-align: center;">
+                <p><i>you can vote as many times as you want</i></p>
+                <p><i>if nobody votes, the gauge slowly gets back to the middle</i></p>
+            </div>
+
+            <p:poll interval="3" listener="#{bean.erosion}" update=":gauge" />
+
+            <div class="footer">
+
+            </div>
+
+        </h:form>
+    </h:body>
+</html>
+
