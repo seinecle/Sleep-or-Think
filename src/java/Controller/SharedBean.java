@@ -58,6 +58,7 @@ public class SharedBean {
     private Map<String,Map<String,Integer>> allMaps = new HashMap();
     private Map<String,LocalDate> time = new HashMap();
     private Map<String,Integer> grades = new HashMap();
+    private Map<String,Integer> group = new HashMap();
     private Map<String,Long> gap = new HashMap();
 
     public Map<String, Integer> getOneMap(String sessionCode) {
@@ -71,6 +72,16 @@ public class SharedBean {
     public void setAllMaps(Map<String, Map<String, Integer>> allMaps) {
         this.allMaps = allMaps;
     }
+
+    public Map<String, Integer> getGroup() {
+        return group;
+    }
+
+    public void setGroup(Map<String, Integer> group) {
+        this.group = group;
+    }
+    
+    
     
     public void updateMapping(String sessionCode,Map<String, Integer> map) {
         allMaps.put(sessionCode, map);

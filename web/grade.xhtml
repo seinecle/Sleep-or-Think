@@ -7,13 +7,14 @@
     <h:head>
         <title>Sleep or think</title>
 
-        <h:outputStylesheet library="css" name="index.css" />
     </h:head>
 
     <h:body>
         <h1 style="text-align:center;">What the group is thinking right now:</h1>
         <p:meterGaugeChart id="gauge" value="#{bean.meterGaugeChartModel}" seriesColors="ff0000, ff8300, ffe500, a1ff00, 00ff04"></p:meterGaugeChart>
-
+        <div style="text-align:center;">
+            <i><h:outputText id ="size" value="#{bean.groupSize} person(s) active in the group"></h:outputText></i>
+        </div>
         <h:form>
             <h2 style="text-align:center;">What I think right now:</h2>
             <h:panelGrid columns="3" style="margin-bottom:10px; margin-left: auto; margin-right: auto;" cellpadding="1">
@@ -26,7 +27,7 @@
             </h:panelGrid>
             <br/>
             <div>
-                <p:commandButton  style="left:47%;" value="send" action ="#{bean.confirmGrade}" ></p:commandButton>
+                <p:commandButton  style="left:47%;" value="send" action ="#{bean.confirmGrade()}" ></p:commandButton>
 
             </div>
             <div style="text-align: center;">
@@ -34,7 +35,7 @@
                 <p><i>if nobody votes, the gauge slowly gets back to the middle</i></p>
             </div>
 
-            <p:poll interval="3" listener="#{bean.erosion}" update=":gauge" />
+            <p:poll interval="3" listener="#{bean.erosion()}" update=":gauge :size" />
 
             <div class="footer">
 

@@ -62,7 +62,7 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
  */
 @ManagedBean
 @SessionScoped
-public class Bean {
+public class Bean implements Serializable {
 
     @ManagedProperty(value = "#{sharedBean}")
     SharedBean sharedBean;
@@ -71,7 +71,9 @@ public class Bean {
     private MeterGaugeChartModel meterGaugeChartModel;
     private List<Number> intervals;
     private Map<String, Integer> map;
+    private Map<String, Long> gap;
     private Float averageGrade;
+    private Integer groupSize;
 
     public Bean() {
         createMeterGaugeModel();
@@ -93,12 +95,33 @@ public class Bean {
         }
         sharedBean.getTime().put(sessionCode, new LocalDate());
         sharedBean.getGap().put(sessionCode, System.currentTimeMillis());
+        if (sharedBean.getGroup().containsKey(sessionCode)) {
+            sharedBean.getGroup().put(sessionCode, sharedBean.getGroup().get(sessionCode) + 1);
+        } else {
+            sharedBean.getGroup().put(sessionCode, 1);
+        }
 
         //find and delete session codes older than 1 day in the shared bean.
         for (Entry<String, LocalDate> entry : sharedBean.getTime().entrySet()) {
             if (entry.getValue().isBefore(new LocalDate().minusDays(1))) {
                 sharedBean.getAllMaps().remove(entry.getKey());
                 sharedBean.getGap().remove(entry.getKey());
+                sharedBean.getGroup().remove(entry.getKey());
+            }
+        }
+
+        map = sharedBean.getOneMap(sessionCode);
+
+        gap = sharedBean.getGap();
+        for (Entry<String, Long> entry : gap.entrySet()) {
+            if (map.containsKey(entry.getKey())) {
+                if (System.currentTimeMillis() < entry.getValue() + 600000) {
+                    groupSize++;
+                } else {
+                    sharedBean.getGrades().remove(entry.getKey());
+                    sharedBean.getTime().remove(entry.getKey());
+                    sharedBean.getGroup().put(entry.getKey(), 1);
+                }
             }
         }
 
@@ -110,6 +133,19 @@ public class Bean {
 
     public void setGrade(Integer grade) {
         this.grade = grade;
+    }
+
+    public Integer getGroupSize() {
+        groupSize = 1;
+        Map<String, Integer> groupMap = sharedBean.getGroup();
+        if (groupMap != null) {
+            groupSize = groupMap.get(sessionCode);
+        }
+        return groupSize;
+    }
+
+    public void setGroupSize(Integer groupSize) {
+        this.groupSize = groupSize;
     }
 
     public MeterGaugeChartModel getMeterGaugeChartModel() {
@@ -125,7 +161,7 @@ public class Bean {
         HttpSession session = (HttpSession) ec.getSession(false);
         String sessionId = session.getId();
 
-        if (grade != null) {
+        if (grade != null && sessionId != null && map != null) {
             map = sharedBean.getOneMap(sessionCode);
             map.put(sessionId, grade * 50);
         } else {
