@@ -89,9 +89,8 @@ public class Bean implements Serializable {
 
     public void setSessionCode(String sessionCode) {
         this.sessionCode = sessionCode;
-        if (sharedBean.getAllMaps().isEmpty()) {
-            map = new HashMap();
-            sharedBean.getAllMaps().put(sessionCode, map);
+        if (sharedBean.getOneMap(sessionCode) == null) {
+            sharedBean.getAllMaps().put(sessionCode, new HashMap());
         }
         sharedBean.getTime().put(sessionCode, new LocalDate());
         sharedBean.getGap().put(sessionCode, System.currentTimeMillis());
@@ -228,7 +227,10 @@ public class Bean implements Serializable {
                 entry.setValue(value + 1);
             }
         }
-
+        
+        if (map.isEmpty()) {
+            sumGrades = 50;
+        }
         averageGrade = (float) sumGrades / numberOfGrades;
 
         //don't update the chart if it is staying around 50

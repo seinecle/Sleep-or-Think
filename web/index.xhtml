@@ -11,7 +11,8 @@
             <h1>Give your feedback, see the what the group is saying.</h1>
             <p>An application by <a href="http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS">Clement Levallois</a>.</p>
             <h:form>
-                Code for this session:  <p:inputText value = "#{bean.sessionCode}"></p:inputText>
+                Code for this session:  <p:inputText id="codeSession" value = "#{bean.sessionCode}"></p:inputText>
+                <p:watermark for="codeSession" value="try &quot;test&quot;" />
                 <p:commandButton value="OK" action="grade?faces-redirect=true"></p:commandButton>
 
             </h:form>
@@ -19,12 +20,10 @@
                 <p><i>Pick a unique code for the group. Each member of the group will enter it on this page.</i></p>
             </div>
             <br />
-            <h:graphicImage value="Resources/img/original.jpg" width="100%"/><br/>
+            <h:graphicImage value="Resources/img/original_web.jpg" width="100%"/><br/>
             <a href="http://www.jobteaser.com/fr/entreprises/coty/evenements/3811-coty-invite-d-honneur-a-la-semaine-du-luxe-de-l-em-lyon">via</a>
 
         </div>
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
     </h:body>
 </html>
 

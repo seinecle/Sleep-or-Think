@@ -6,6 +6,7 @@
 
 package Controller;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.bean.ApplicationScoped;
@@ -53,7 +54,7 @@ import org.joda.time.LocalDate;
  */
 @ManagedBean (eager=true)
 @ApplicationScoped
-public class SharedBean {
+public class SharedBean implements Serializable{
     
     private Map<String,Map<String,Integer>> allMaps = new HashMap();
     private Map<String,LocalDate> time = new HashMap();
