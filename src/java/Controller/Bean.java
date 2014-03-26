@@ -118,12 +118,8 @@ public class Bean implements Serializable {
         findAndDeleteOldVotes(5);
         findAndDeleteOldSessionCodes();
 
-        //set the group size (+1 because we have not been added to the map yet
-        if (sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).isEmpty()) {
-            groupSize = 1;
-        } else {
-            groupSize = sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).size();
-        }
+        setTheGroupSize();
+
     }
 
     public Integer getGrade() {
@@ -203,6 +199,7 @@ public class Bean implements Serializable {
 
             //find and delete old votes
             findAndDeleteOldVotes(5);
+            setTheGroupSize();
 
             //don't update before 3 seconds have passed since last update
             Long last = 0l;
@@ -243,6 +240,7 @@ public class Bean implements Serializable {
                 sumGrades = 50;
             }
             averageGrade = (float) sumGrades / numberOfGrades;
+
 
             //don't update the chart if it is staying around 50
             if (averageGrade == null || (averageGrade > 49 & averageGrade < 51)) {
@@ -292,5 +290,14 @@ public class Bean implements Serializable {
             System.out.println("NPE in findAndDeleteOldVotes(): " + e.getMessage());
         }
 
+    }
+
+    private void setTheGroupSize() {
+        //set the group size (+1 if the first user has not added a grade yet)
+        if (sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).isEmpty()) {
+            groupSize = 1;
+        } else {
+            groupSize = sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).size();
+        }
     }
 }
