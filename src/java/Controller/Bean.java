@@ -8,15 +8,19 @@ package Controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.MeterGaugeChartModel;
@@ -70,8 +74,8 @@ public class Bean implements Serializable {
     private Integer grade;
     private MeterGaugeChartModel meterGaugeChartModel;
     private List<Number> intervals;
-    private Map<String, Integer> map;
-    private Map<String, Long> gap;
+    private Map<String, Integer> mapIPToGrade;
+    private Map<String, Long> mapIPToTime;
     private Float averageGrade;
     private Integer groupSize;
 
@@ -89,41 +93,37 @@ public class Bean implements Serializable {
 
     public void setSessionCode(String sessionCode) {
         this.sessionCode = sessionCode;
-        if (sharedBean.getOneMap(sessionCode) == null) {
-            sharedBean.getAllMaps().put(sessionCode, new HashMap());
-        }
-        sharedBean.getTime().put(sessionCode, new LocalDate());
-        sharedBean.getGap().put(sessionCode, System.currentTimeMillis());
-        if (sharedBean.getGroup().containsKey(sessionCode)) {
-            sharedBean.getGroup().put(sessionCode, sharedBean.getGroup().get(sessionCode) + 1);
-        } else {
-            sharedBean.getGroup().put(sessionCode, 1);
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+
+        //setting a cookie to remember user on this session IF there is not already a cookie set. Cookies expire after 4 hours or so.
+        Map<String, Object> cookies = ec.getRequestCookieMap();
+        Cookie cookie = (Cookie) cookies.get(sessionCode);
+        if (cookie == null) {
+            HttpServletResponse response = (HttpServletResponse) ec.getResponse();
+            String uuid = UUID.randomUUID().toString();
+            cookie = new Cookie(sessionCode, uuid);
+            cookie.setMaxAge(15000); // Expire time. -1 = by end of current session, 0 = immediately expire it, otherwise just the lifetime in seconds.
+            response.addCookie(cookie);
         }
 
+        //if this is a new session code, create an entry in the two shared maps
+        if (!sharedBean.getMapSessionCodesToDay().containsKey(sessionCode)) {
+            sharedBean.getMapSessionCodesToDay().put(sessionCode, new LocalDate());
+            sharedBean.getMapSessionCodesToIPsToGrades().put(sessionCode, new HashMap());
+            sharedBean.getMapSessionCodesToIPsToTime().put(sessionCode, new HashMap());
+        }
+
+        //find and delete votes that were cast more than 5 minutes ago
         //find and delete session codes older than 1 day in the shared bean.
-        for (Entry<String, LocalDate> entry : sharedBean.getTime().entrySet()) {
-            if (entry.getValue().isBefore(new LocalDate().minusDays(1))) {
-                sharedBean.getAllMaps().remove(entry.getKey());
-                sharedBean.getGap().remove(entry.getKey());
-                sharedBean.getGroup().remove(entry.getKey());
-            }
+        findAndDeleteOldVotes(5);
+        findAndDeleteOldSessionCodes();
+
+        //set the group size (+1 because we have not been added to the map yet
+        if (sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).isEmpty()) {
+            groupSize = 1;
+        } else {
+            groupSize = sharedBean.getMapSessionCodesToIPsToGrades().get(sessionCode).size();
         }
-
-        map = sharedBean.getOneMap(sessionCode);
-
-        gap = sharedBean.getGap();
-        for (Entry<String, Long> entry : gap.entrySet()) {
-            if (map.containsKey(entry.getKey())) {
-                if (System.currentTimeMillis() < entry.getValue() + 600000) {
-                    groupSize++;
-                } else {
-                    sharedBean.getGrades().remove(entry.getKey());
-                    sharedBean.getTime().remove(entry.getKey());
-                    sharedBean.getGroup().put(entry.getKey(), 1);
-                }
-            }
-        }
-
     }
 
     public Integer getGrade() {
@@ -135,11 +135,6 @@ public class Bean implements Serializable {
     }
 
     public Integer getGroupSize() {
-        groupSize = 1;
-        Map<String, Integer> groupMap = sharedBean.getGroup();
-        if (groupMap != null) {
-            groupSize = groupMap.get(sessionCode);
-        }
         return groupSize;
     }
 
@@ -156,31 +151,35 @@ public class Bean implements Serializable {
     }
 
     public void confirmGrade() {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        HttpSession session = (HttpSession) ec.getSession(false);
-        String sessionId = session.getId();
+        try {
+            Map<String, Object> cookies = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
+            Cookie cookie = (Cookie) cookies.get(sessionCode);
+            String ipAddress = cookie.getValue();
 
-        if (grade != null && sessionId != null && map != null) {
-            map = sharedBean.getOneMap(sessionCode);
-            map.put(sessionId, grade * 50);
-        } else {
-            return;
+            if (grade != null && ipAddress != null) {
+                mapIPToGrade = sharedBean.getOneMapIPToGrade(sessionCode);
+                mapIPToGrade.put(ipAddress, grade * 50);
+            } else {
+                return;
+            }
+
+            Integer sumGrades = 0;
+            Integer numberOfGrades = mapIPToGrade.size();
+            if (numberOfGrades == 0) {
+                numberOfGrades = 1;
+            }
+
+            for (Entry<String, Integer> entry : mapIPToGrade.entrySet()) {
+                sumGrades = sumGrades + entry.getValue();
+            }
+            averageGrade = (float) sumGrades / numberOfGrades;
+
+            meterGaugeChartModel = new MeterGaugeChartModel(averageGrade, intervals);
+            RequestContext rc = RequestContext.getCurrentInstance();
+            rc.update("gauge");
+        } catch (NullPointerException e) {
+            System.out.println("NPE in confirmGrade(): " + e.getMessage());
         }
-
-        Integer sumGrades = 0;
-        Integer numberOfGrades = map.size();
-        if (numberOfGrades == 0) {
-            numberOfGrades = 1;
-        }
-
-        for (Entry<String, Integer> entry : map.entrySet()) {
-            sumGrades = sumGrades + entry.getValue();
-        }
-        averageGrade = (float) sumGrades / numberOfGrades;
-
-        meterGaugeChartModel = new MeterGaugeChartModel(averageGrade, intervals);
-        RequestContext rc = RequestContext.getCurrentInstance();
-        rc.update("gauge");
 
     }
 
@@ -200,46 +199,98 @@ public class Bean implements Serializable {
     }
 
     public void erosion() {
-        map = sharedBean.getOneMap(sessionCode);
-        if (map == null) {
-            return;
-        }
-        int sumGrades = 0;
-        int numberOfGrades = map.size();
-        if (numberOfGrades == 0) {
-            numberOfGrades = 1;
-        }
+        try {
 
-        //don't update before 5 seconds have passed since last update
-        Long last = sharedBean.getGap().get(sessionCode);
-        if (System.currentTimeMillis() - last < 5000) {
-            return;
-        }
-        sharedBean.getGap().put(sessionCode, System.currentTimeMillis());
+            //find and delete old votes
+            findAndDeleteOldVotes(5);
 
-        for (Entry<String, Integer> entry : map.entrySet()) {
-            int value = entry.getValue();
-            sumGrades = sumGrades + value;
-            if (value > 51) {
-                entry.setValue(value - 1);
+            //don't update before 3 seconds have passed since last update
+            Long last = 0l;
+            mapIPToTime = sharedBean.getOneMapIPToTime(sessionCode);
+            for (Long time : mapIPToTime.values()) {
+                if (time > last) {
+                    last = time;
+                }
             }
-            if (value < 49) {
-                entry.setValue(value + 1);
+
+            if (System.currentTimeMillis() - last < 3000) {
+                return;
             }
-        }
-        
-        if (map.isEmpty()) {
-            sumGrades = 50;
-        }
-        averageGrade = (float) sumGrades / numberOfGrades;
 
-        //don't update the chart if it is staying around 50
-        if (averageGrade == null || (averageGrade > 49 & averageGrade < 51)) {
-            return;
-        }
+            mapIPToGrade = sharedBean.getOneMapIPToGrade(sessionCode);
+            if (mapIPToGrade == null) {
+                return;
+            }
+            int sumGrades = 0;
+            int numberOfGrades = mapIPToGrade.size();
+            if (numberOfGrades == 0) {
+                numberOfGrades = 1;
+            }
 
-        meterGaugeChartModel = new MeterGaugeChartModel(averageGrade, intervals);
+            for (Entry<String, Integer> entry : mapIPToGrade.entrySet()) {
+                int value = entry.getValue();
+                sumGrades = sumGrades + value;
+
+                if (value > 51) {
+                    entry.setValue(value - 1);
+                }
+                if (value < 49) {
+                    entry.setValue(value + 1);
+                }
+            }
+
+            if (mapIPToGrade.isEmpty()) {
+                sumGrades = 50;
+            }
+            averageGrade = (float) sumGrades / numberOfGrades;
+
+            //don't update the chart if it is staying around 50
+            if (averageGrade == null || (averageGrade > 49 & averageGrade < 51)) {
+                return;
+            }
+
+            meterGaugeChartModel = new MeterGaugeChartModel(averageGrade, intervals);
+        } catch (NullPointerException e) {
+            System.out.println("NPE in erosion(): " + e.getMessage());
+        }
 
     }
 
+    private void findAndDeleteOldSessionCodes() {
+        try {
+            Iterator<Entry<String, LocalDate>> iterator = sharedBean.getMapSessionCodesToDay().entrySet().iterator();
+            Entry<String, LocalDate> entry;
+            while (iterator.hasNext()) {
+                entry = iterator.next();
+                if (entry.getValue().isBefore(new LocalDate().minusDays(1))) {
+                    sharedBean.getMapSessionCodesToIPsToGrades().remove(entry.getKey());
+                    sharedBean.getMapSessionCodesToIPsToTime().remove(entry.getKey());
+                    iterator.remove();
+                }
+            }
+        } catch (NullPointerException e) {
+            System.out.println("NPE in findAndDeleteOldSessionCodes(): " + e.getMessage());
+        }
+
+    }
+
+    private void findAndDeleteOldVotes(Integer minutes) {
+        try {
+            Iterator<Entry<String, Long>> iterator = sharedBean.getOneMapIPToTime(sessionCode).entrySet().iterator();
+            Entry<String, Long> entry;
+            Long now = System.currentTimeMillis();
+
+            //deletes IPS and their votes if older than n minutes
+            while (iterator.hasNext()) {
+                entry = iterator.next();
+                if (now - (minutes * 60000) > entry.getValue()) {
+                    sharedBean.getMapSessionCodesToIPsToGrades().remove(entry.getKey());
+                    iterator.remove();
+                }
+            }
+        } catch (NullPointerException e) {
+            System.out.println("NPE in findAndDeleteOldVotes(): " + e.getMessage());
+        }
+
+    }
 }

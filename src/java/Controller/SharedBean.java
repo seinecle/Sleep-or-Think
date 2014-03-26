@@ -56,61 +56,47 @@ import org.joda.time.LocalDate;
 @ApplicationScoped
 public class SharedBean implements Serializable{
     
-    private Map<String,Map<String,Integer>> allMaps = new HashMap();
-    private Map<String,LocalDate> time = new HashMap();
-    private Map<String,Integer> grades = new HashMap();
-    private Map<String,Integer> group = new HashMap();
-    private Map<String,Long> gap = new HashMap();
+    private Map<String,Map<String,Integer>> mapSessionCodesToIPsToGrades = new HashMap();
+    private Map<String,Map<String,Long>> mapSessionCodesToIPsToTime = new HashMap();
+    private Map<String,LocalDate> mapSessionCodesToDay = new HashMap();
 
-    public Map<String, Integer> getOneMap(String sessionCode) {
-        return allMaps.get(sessionCode);
+    public Map<String, Integer> getOneMapIPToGrade(String sessionCode) {
+        return mapSessionCodesToIPsToGrades.get(sessionCode);
     }
 
-    public Map<String, Map<String, Integer>> getAllMaps() {
-        return allMaps;
+    public Map<String, Long> getOneMapIPToTime(String sessionCode) {
+        return mapSessionCodesToIPsToTime.get(sessionCode);
     }
 
-    public void setAllMaps(Map<String, Map<String, Integer>> allMaps) {
-        this.allMaps = allMaps;
-    }
-
-    public Map<String, Integer> getGroup() {
-        return group;
-    }
-
-    public void setGroup(Map<String, Integer> group) {
-        this.group = group;
-    }
     
-    
-    
-    public void updateMapping(String sessionCode,Map<String, Integer> map) {
-        allMaps.put(sessionCode, map);
+    public void updateMapSessionCodesToIPsToGrades(String sessionCode,Map<String, Integer> map) {
+        mapSessionCodesToIPsToGrades.put(sessionCode, map);
     }
 
-    public Map<String, LocalDate> getTime() {
-        return time;
+    public Map<String, LocalDate> getMapSessionCodesToDay() {
+        return mapSessionCodesToDay;
     }
 
-    public void setTime(Map<String, LocalDate> time) {
-        this.time = time;
+    public void setMapSessionCodesToDay(Map<String, LocalDate> mapSessionCodesToDay) {
+        this.mapSessionCodesToDay = mapSessionCodesToDay;
     }
 
-    public Map<String, Integer> getGrades() {
-        return grades;
+    public Map<String, Map<String, Integer>> getMapSessionCodesToIPsToGrades() {
+        return mapSessionCodesToIPsToGrades;
     }
 
-    public void setGrades(Map<String, Integer> grades) {
-        this.grades = grades;
+    public void setMapSessionCodesToIPsToGrades(Map<String, Map<String, Integer>> mapSessionCodesToIPsToGrades) {
+        this.mapSessionCodesToIPsToGrades = mapSessionCodesToIPsToGrades;
     }
 
-    public Map<String, Long> getGap() {
-        return gap;
+    public Map<String, Map<String, Long>> getMapSessionCodesToIPsToTime() {
+        return mapSessionCodesToIPsToTime;
     }
 
-    public void setGap(Map<String, Long> gap) {
-        this.gap = gap;
+    public void setMapSessionCodesToIPsToTime(Map<String, Map<String, Long>> mapSessionCodesToIPsToTime) {
+        this.mapSessionCodesToIPsToTime = mapSessionCodesToIPsToTime;
     }
+
     
     
     
