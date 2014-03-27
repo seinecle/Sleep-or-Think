@@ -3,8 +3,8 @@
 ## A web app to experiment with real time feedback of students in the classroom.
 
 Just go to www.sleep-or-think.com to test it.  
-1. Choose a code that all students in the classroom will share
-2. Everybody puts this code and can vote anonymously and see aggregated results in real time.
+1. Choose a code that all students in the classroom will share  
+2. Everybody puts this code and can vote anonymously and see aggregated results in real time.  
 
 ## Cooky
 Yes, this website is using a cookie: it is a single line of random code to identify browsers uniquely. This insures that just one vote can be cast per browser.

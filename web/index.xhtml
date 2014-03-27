@@ -2,18 +2,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Sleep of think</title>
     </h:head>
     <h:body>
         <div style="text-align:center">
-            <h1>Give your feedback, see the what the group is saying.</h1>
+            <h1>Give your feedback, see the what the group is thinking.</h1>
             <p>An application by <a href="http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS">Clement Levallois</a>.</p>
             <h:form>
-                Code for this session:  <p:inputText id="codeSession" value = "#{bean.sessionCode}"></p:inputText>
+                <p:messages autoUpdate="true"/>
+                <h:outputLabel for="codeSession" value="Code for this session: " style="font-weight:bold"/> 
+                <p:inputText id="codeSession" required ="true" value ="#{bean.sessionCode}" label="code" validatorMessage="Please choose a session code before clicking OK">
+                    <f:validateLength minimum="1" maximum="100" />
+                </p:inputText>
                 <p:watermark for="codeSession" value="try &quot;test&quot;" />
-                <p:commandButton value="OK" action="grade?faces-redirect=true"></p:commandButton>
+                <p:commandButton value="OK" action="grade?faces-redirect=true" validateClient="true"></p:commandButton>
+                <p:message for="codeSession"/>
 
             </h:form>
             <div style="text-align: center;">

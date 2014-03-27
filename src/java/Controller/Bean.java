@@ -155,6 +155,8 @@ public class Bean implements Serializable {
             if (grade != null && ipAddress != null) {
                 mapIPToGrade = sharedBean.getOneMapIPToGrade(sessionCode);
                 mapIPToGrade.put(ipAddress, grade * 50);
+                mapIPToTime = sharedBean.getOneMapIPToTime(sessionCode);
+                mapIPToTime.put(ipAddress, System.currentTimeMillis());
             } else {
                 return;
             }
@@ -210,7 +212,7 @@ public class Bean implements Serializable {
                 }
             }
 
-            if (System.currentTimeMillis() - last < 3000) {
+            if (System.currentTimeMillis() - last < 5000) {
                 return;
             }
 
@@ -240,7 +242,6 @@ public class Bean implements Serializable {
                 sumGrades = 50;
             }
             averageGrade = (float) sumGrades / numberOfGrades;
-
 
             //don't update the chart if it is staying around 50
             if (averageGrade == null || (averageGrade > 49 & averageGrade < 51)) {
@@ -282,9 +283,14 @@ public class Bean implements Serializable {
             while (iterator.hasNext()) {
                 entry = iterator.next();
                 if (now - (minutes * 60000) > entry.getValue()) {
-                    sharedBean.getMapSessionCodesToIPsToGrades().remove(entry.getKey());
-                    iterator.remove();
+//                if (now - 10000 > entry.getValue()) {
+                    //we do not delete the vote of the last person
+                    if (sharedBean.getOneMapIPToGrade(sessionCode).size() > 1) {
+                        sharedBean.getOneMapIPToGrade(sessionCode).remove(entry.getKey());
+                        iterator.remove();
+                    }
                 }
+
             }
         } catch (NullPointerException e) {
             System.out.println("NPE in findAndDeleteOldVotes(): " + e.getMessage());
